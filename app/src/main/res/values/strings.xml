@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">LAYOUTindex Demo</string>
+
+    <!--Splash Activity-->
+    <string name="text_splash">LAYOUTindex Demo</string>
+
+    <!--Detail Activity-->
+    <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="searchID">User ID</string>
+    <string name="searchButton">Search</string>
+    <string name="available">AVAILABLE USERS</string>
 </resources>
