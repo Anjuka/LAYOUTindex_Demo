@@ -1,13 +1,11 @@
 package com.anjukakoralage.layoutindexdemo.controller;
 
-import com.anjukakoralage.layoutindexdemo.data.UserServices;
 import com.anjukakoralage.layoutindexdemo.helper.Constant;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by anjukakoralage on 27,September,2019
@@ -26,8 +24,7 @@ public class RetrofitClientInstance {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constant.HTTP.BASE_URL)
                     .client(client)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .build();
 
         }

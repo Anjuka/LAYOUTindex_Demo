@@ -7,6 +7,9 @@
     <!--Detail Activity-->
     <string name="id">ID</string>
     <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="fName">First Name</string>
+    <string name="lName">Last Name</string>
     <string name="searchID">User ID</string>
     <string name="searchButton">Search</string>
     <string name="available">AVAILABLE USERS</string>

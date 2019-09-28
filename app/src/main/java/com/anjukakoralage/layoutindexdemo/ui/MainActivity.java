@@ -15,6 +15,11 @@ import com.anjukakoralage.layoutindexdemo.controller.RetrofitClientInstance;
 import com.anjukakoralage.layoutindexdemo.data.UserServices;
 import com.anjukakoralage.layoutindexdemo.model.UserDetails;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,15 +27,18 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.ResourceObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.btnSearch)   Button btnSearch;
-    @BindView(R.id.rvUserList)      RecyclerView rvUserList;
+    private RecyclerView rvCountryData;
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressDialog progressDoalog;
-    private RecyclerView.Adapter adapter;
+    private RecyclerView.Adapter  adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,38 +48,34 @@ public class MainActivity extends AppCompatActivity {
         progressDialog();
 
         UserServices service = RetrofitClientInstance.getRetrofitInstance().create(UserServices.class);
-        final Observable<List<UserDetails>> call = service.getAllDetail();
+
+        Call<String> call = service.getAllDetails();
 
 
-        call
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ResourceObserver<List<UserDetails>>() {
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.i("Responsestring", response.body().toString());
+                //Toast.makeText()
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        Log.i("onSuccess", response.body().toString());
 
-                    @Override
-                    public void onComplete() {
+                        String jsonresponse = response.body().toString();
+                        writeTv(jsonresponse);
 
-                        progressDoalog.dismiss();
-                        Log.d(TAG, "In onCompleted()");
+                    } else {
+                        Log.i("onEmptyResponse", "Returned empty response");
+                        //Toast.makeText(getContext(),"Nothing returned",Toast.LENGTH_LONG).show();
                     }
+                }
+            }
 
-                    @Override
-                    public void onNext(List<UserDetails> retroUserDetails) {
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
 
-                        System.out.println("OnNext...");
-                        Log.d(TAG, "In onNext() " +retroUserDetails );
-                        generateDataList(retroUserDetails);
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                        progressDoalog.dismiss();
-                        e.printStackTrace();
-                        Log.d(TAG, "In onError()");
-                    }
-                });
+            }
+        });
     }
 
 
@@ -81,12 +85,55 @@ public class MainActivity extends AppCompatActivity {
         progressDoalog.show();
     }
 
+    private void writeTv(String response){
 
-    private void generateDataList(List<UserDetails> userList) {
-        adapter = new UserAdapter(this, userList);
-        rvUserList.setHasFixedSize(true);
-        rvUserList.setLayoutManager(new LinearLayoutManager(this));
-        rvUserList.setAdapter(adapter);
+        try {
+            //getting the whole json object from the response
+            JSONObject obj = new JSONObject(response);
+            if(obj.optString("page").equals("1")){
+                progressDoalog.hide();
+                ArrayList<UserDetails> retroModelArrayList = new ArrayList<>();
+                JSONArray dataArray  = obj.getJSONArray("data");
+
+                for (int i = 0; i < dataArray.length(); i++) {
+
+                    UserDetails retroModel = new UserDetails();
+                    JSONObject dataobj = dataArray.getJSONObject(i);
+
+                    retroModel.setId(dataobj.getString("id"));
+                    retroModel.setFirst_name(dataobj.getString("first_name"));
+                    retroModel.setLast_name(dataobj.getString("last_name"));
+                    retroModel.setEmail(dataobj.getString("email"));
+                    retroModel.setAvatar(dataobj.getString("avatar"));
+
+                    retroModelArrayList.add(retroModel);
+
+                }
+                generateDataList(retroModelArrayList);
+
+
+                for (int j = 0; j < retroModelArrayList.size(); j++){
+                }
+
+            }else {
+                progressDoalog.hide();
+                Toast.makeText(MainActivity.this, obj.optString("message")+"", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void generateDataList(ArrayList<UserDetails> retroModelArrayList) {
+
+        rvCountryData = findViewById(R.id.rvUserList);
+        adapter = new UserAdapter(this, retroModelArrayList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        rvCountryData.setLayoutManager(layoutManager);
+        rvCountryData.setAdapter(adapter);
     }
 
     private void showToast() {

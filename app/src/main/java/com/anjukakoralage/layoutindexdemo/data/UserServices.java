@@ -1,5 +1,6 @@
 package com.anjukakoralage.layoutindexdemo.data;
 
+import com.anjukakoralage.layoutindexdemo.model.UserAllDetails;
 import com.anjukakoralage.layoutindexdemo.model.UserDetails;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import retrofit2.http.GET;
  */
 public interface UserServices {
 
-    @GET("users?page=2")
-    Observable<List<UserDetails>> getAllDetail();
+    @GET("users")
+    //Observable<List<UserDetails>> getAllDetail();
+    Call<String> getAllDetails();
 }
