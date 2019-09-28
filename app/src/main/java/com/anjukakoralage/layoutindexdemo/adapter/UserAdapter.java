@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -94,6 +95,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         TextView secondName = (TextView) dialog.findViewById(R.id.tvLName);
         TextView emailA = (TextView) dialog.findViewById(R.id.tvEmail);
         CircleImageView avatarImage = (CircleImageView) dialog.findViewById(R.id.profile_image);
+        Button btnClose = (Button) dialog.findViewById(R.id.btnCancel);
 
         firstName.setText(fName);
         secondName.setText(lName);
@@ -101,6 +103,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         Picasso.get().load(image).into(avatarImage);
 
 
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
 
 
     }

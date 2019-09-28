@@ -13,4 +13,5 @@
     <string name="searchID">User ID</string>
     <string name="searchButton">Search</string>
     <string name="available">AVAILABLE USERS</string>
+    <string name="close">Close</string>
 </resources>

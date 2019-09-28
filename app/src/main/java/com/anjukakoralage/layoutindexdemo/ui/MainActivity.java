@@ -13,6 +13,7 @@ import com.anjukakoralage.layoutindexdemo.R;
 import com.anjukakoralage.layoutindexdemo.adapter.UserAdapter;
 import com.anjukakoralage.layoutindexdemo.controller.RetrofitClientInstance;
 import com.anjukakoralage.layoutindexdemo.data.UserServices;
+import com.anjukakoralage.layoutindexdemo.helper.Utils;
 import com.anjukakoralage.layoutindexdemo.model.UserDetails;
 
 import org.json.JSONArray;
@@ -46,6 +47,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         progressDialog();
+
+        if (Utils.isNetworkAvailable(getApplicationContext())){
+
+            //get Data from direct API - Connectivity is true
+            getFeed();
+        }
+        else {
+            //get Data from direct API - Connectivity is false
+            getFeedFromDataBase();
+        }
+
+    }
+
+    private void getFeedFromDataBase() {
+
+
+    }
+
+    private void getFeed() {
 
         UserServices service = RetrofitClientInstance.getRetrofitInstance().create(UserServices.class);
 

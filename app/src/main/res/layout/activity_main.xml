@@ -26,7 +26,9 @@
                 android:background="@drawable/search_box_custom"
                 android:padding="15dp"
                 android:hint="@string/searchID"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:focusable="false"
+                android:focusableInTouchMode="true"/>
 
 
             <Button
@@ -34,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/five_side_polygn"
                 android:text="@string/searchButton"
                 android:textColor="@color/white" />
 
